@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Executivo & Previsão de Faturamento com IA</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome & Chart.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(22, 30, 49, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #6366f1;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%);
+      --radius: 16px;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); padding: 2rem 1.5rem; line-height: 1.6; }
+    .container { max-width: 1240px; margin: 0 auto; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1.5rem; }
+    .header-title h1 { font-size: 2rem; font-weight: 800; }
+    .header-title p { color: var(--text-muted); font-size: 0.95rem; }
+    .badge-dev { background: rgba(99, 102, 241, 0.15); color: var(--primary); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; border: 1px solid rgba(99, 102, 241, 0.3); }
+    
+    .grid-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+    .card-kpi { background: var(--card-bg); border: 1px solid var(--card-border); padding: 1.75rem; border-radius: var(--radius); backdrop-filter: blur(10px); }
+    .card-kpi span { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+    .card-kpi h2 { font-size: 2rem; font-weight: 800; margin: 0.3rem 0; }
+    .card-kpi p { font-size: 0.85rem; color: var(--success); font-weight: 600; display: flex; align-items: center; gap: 0.4rem; }
+    
+    .secao-forecast { background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.08)); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: var(--radius); padding: 2rem; margin-bottom: 2.5rem; }
+    .forecast-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .forecast-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .card-mes { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+    .card-mes.destaque-bf { border-color: var(--primary); box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
+    .card-mes h3 { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .card-mes .valor { font-size: 1.9rem; font-weight: 800; color: var(--success); margin-bottom: 0.5rem; }
+    .card-mes .intervalo { font-size: 0.85rem; color: var(--text-muted); background: rgba(255, 255, 255, 0.05); padding: 0.4rem; border-radius: 6px; }
+
+    .grid-charts { display: grid; grid-template-columns: 2fr 1fr; gap: 1.75rem; margin-bottom: 2.5rem; }
+    @media (max-width: 992px) { .grid-charts { grid-template-columns: 1fr; } }
+    .chart-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 1.75rem; }
+    .chart-box h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; }
+
+    .tabela-modelos { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .tabela-modelos th, .tabela-modelos td { padding: 0.9rem; text-align: left; border-bottom: 1px solid var(--card-border); font-size: 0.9rem; }
+    .tabela-modelos th { color: var(--text-muted); font-weight: 700; }
+    .badge-winner { background: rgba(16, 185, 129, 0.15); color: var(--success); padding: 0.25rem 0.6rem; border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="header-title">
+        <h1>📊 Inteligência de Vendas & Previsão de Faturamento</h1>
+        <p>Análise de 29.094 vendas históricas e modelo preditivo de Machine Learning</p>
+      </div>
+      <div class="badge-dev">
+        <i class="fa-solid fa-code"></i> Desenvolvido por Jhonny Brasiliano da Silva
+      </div>
+    </header>
+
+    <!-- KPIs Executivos -->
+    <div class="grid-kpis">
+      <div class="card-kpi">
+        <span>Faturamento Histórico Acumulado</span>
+        <h2>R$ 60,29M</h2>
+        <p><i class="fa-solid fa-arrow-trend-up"></i> 44 meses analisados (2023 - 2026)</p>
+      </div>
+
+      <div class="card-kpi">
+        <span>Lucro Líquido Acumulado</span>
+        <h2>R$ 25,01M</h2>
+        <p><i class="fa-solid fa-chart-pie"></i> Margem Líquida Média de 41,5%</p>
+      </div>
+
+      <div class="card-kpi">
+        <span>Total de Pedidos Concluídos</span>
+        <h2>29.094</h2>
+        <p><i class="fa-solid fa-bag-shopping"></i> 52.083 itens comercializados</p>
+      </div>
+
+      <div class="card-kpi">
+        <span>Ticket Médio por Pedido</span>
+        <h2>R$ 2.072,28</h2>
+        <p><i class="fa-solid fa-receipt"></i> Alto valor agregado em TI & Móveis</p>
+      </div>
+    </div>
+
+    <!-- Seção de Previsão 3 Meses -->
+    <div class="secao-forecast">
+      <div class="forecast-header">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; color: #ffffff;">🎯 Quanto a empresa provavelmente irá faturar nos próximos 3 meses?</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Previsão gerada por algoritmo <strong>Random Forest Regressor</strong> com precisão de 94,07% (MAPE 5.93%)</p>
+        </div>
+        <div style="text-align: right;">
+          <span style="font-size: 0.85rem; color: var(--text-muted); display: block;">Faturamento Total Previsto no Trimestre</span>
+          <strong style="font-size: 1.75rem; color: #10b981;">R$ 5.164.330,42</strong>
+        </div>
+      </div>
+
+      <div class="forecast-cards">
+        <div class="card-mes">
+          <h3>Mês 1 &bull; Setembro/2026</h3>
+          <div class="valor">R$ 1.404.146,30</div>
+          <div class="intervalo">Cenário: R$ 1,32M &bull; R$ 1,48M</div>
+        </div>
+
+        <div class="card-mes">
+          <h3>Mês 2 &bull; Outubro/2026</h3>
+          <div class="valor">R$ 1.711.389,96</div>
+          <div class="intervalo">Cenário: R$ 1,61M &bull; R$ 1,81M</div>
+        </div>
+
+        <div class="card-mes destaque-bf">
+          <div style="font-size: 0.75rem; background: rgba(99, 102, 241, 0.2); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 50px; display: inline-block; font-weight: 700; margin-bottom: 0.4rem;">🔥 Black Friday</div>
+          <h3>Mês 3 &bull; Novembro/2026</h3>
+          <div class="valor">R$ 2.048.794,16</div>
+          <div class="intervalo">Cenário: R$ 1,92M &bull; R$ 2,17M</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid-charts">
+      <div class="chart-box">
+        <h3>📈 Série Temporal: Faturamento Real vs. Previsão IA (Próximos 3 Meses)</h3>
+        <canvas id="graficoSérieTemporal" height="110"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h3>🏆 Desempenho dos Modelos de ML</h3>
+        <table class="tabela-modelos">
+          <thead>
+            <tr>
+              <th>Modelo</th>
+              <th>MAPE</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Random Forest</strong></td>
+              <td style="color: var(--success); font-weight: bold;">5,93%</td>
+              <td><span class="badge-winner">CAMPEÃO</span></td>
+            </tr>
+            <tr>
+              <td>Regressão Linear</td>
+              <td>11,52%</td>
+              <td>Intermediário</td>
+            </tr>
+            <tr>
+              <td>Ridge (L2)</td>
+              <td>11,61%</td>
+              <td>Intermediário</td>
+            </tr>
+            <tr>
+              <td>Gradient Boosting</td>
+              <td>15,23%</td>
+              <td>Baseline</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('graficoSérieTemporal').getContext('2d');
+    
+    const meses = [
+      'Jan/25', 'Fev/25', 'Mar/25', 'Abr/25', 'Mai/25', 'Jun/25', 'Jul/25', 'Ago/25', 'Set/25', 'Out/25', 'Nov/25', 'Dez/25',
+      'Jan/26', 'Fev/26', 'Mar/26', 'Abr/26', 'Mai/26', 'Jun/26', 'Jul/26', 'Ago/26', 
+      'Set/26 (IA)', 'Out/26 (IA)', 'Nov/26 (IA)'
+    ];
+
+    const faturamentoHistorico = [
+      1280000, 1340000, 1420000, 1480000, 1690000, 1550000, 1510000, 1640000, 1620000, 1750000, 2450000, 2680000,
+      1390000, 1440000, 1530000, 1590000, 1780000, 1660000, 1610000, 1740000,
+      null, null, null
+    ];
+
+    const faturamentoPrevisto = [
+      null, null, null, null, null, null, null, null, null, null, null, null,
+      null, null, null, null, null, null, null, 1740000,
+      1404146.30, 1711389.96, 2048794.16
+    ];
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: meses,
+        datasets: [
+          {
+            label: 'Faturamento Histórico (R$)',
+            data: faturamentoHistorico,
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 3,
+            pointRadius: 4,
+            fill: true,
+            tension: 0.3
+          },
+          {
+            label: 'Previsão Machine Learning (R$)',
+            data: faturamentoPrevisto,
+            borderColor: '#10b981',
+            borderDash: [6, 6],
+            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+            borderWidth: 3,
+            pointRadius: 6,
+            pointBackgroundColor: '#10b981',
+            fill: true,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { labels: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
+        },
+        scales: {
+          x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { 
+            ticks: { 
+              color: '#94a3b8',
+              callback: (val) => 'R$ ' + (val / 1e6).toFixed(1) + 'M'
+            },
+            grid: { color: 'rgba(255,255,255,0.05)' } 
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
