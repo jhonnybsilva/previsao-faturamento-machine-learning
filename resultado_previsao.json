@@ -1,0 +1,75 @@
+{
+    "metricas_gerais": {
+        "total_pedidos": 29094,
+        "faturamento_acumulado": 60290802.09,
+        "lucro_acumulado": 25012437.09,
+        "ticket_medio": 2072.276142503609,
+        "meses_analisados": 44
+    },
+    "melhor_modelo": {
+        "nome": "Random Forest Regressor",
+        "r2_score": 0.2762687441699845,
+        "mae": 84102.86343792104,
+        "mape": 5.928387902071899
+    },
+    "comparacao_modelos": [
+        {
+            "Modelo": "Random Forest Regressor",
+            "R² Score": 0.2762687441699845,
+            "MAE (Erro Médio Absoluto)": 84102.86343792104,
+            "RMSE": 122436.66278618244,
+            "MAPE (%)": 5.928387902071899
+        },
+        {
+            "Modelo": "Regressão Linear Múltipla",
+            "R² Score": -0.4806342922484679,
+            "MAE (Erro Médio Absoluto)": 161334.8597601473,
+            "RMSE": 175124.4244694383,
+            "MAPE (%)": 11.52013350827919
+        },
+        {
+            "Modelo": "Ridge Regression (L2)",
+            "R² Score": -0.9099346624940721,
+            "MAE (Erro Médio Absoluto)": 161264.61285001738,
+            "RMSE": 198898.7594978208,
+            "MAPE (%)": 11.614346082503742
+        },
+        {
+            "Modelo": "Gradient Boosting Regressor",
+            "R² Score": -2.203784817636115,
+            "MAE (Erro Médio Absoluto)": 211381.00183591092,
+            "RMSE": 257605.11890435728,
+            "MAPE (%)": 15.233286456628562
+        }
+    ],
+    "previsoes_3_meses": [
+        {
+            "periodo": "Setembro/2026",
+            "mes_num": 9,
+            "ano": 2026,
+            "faturamento_previsto": 1404146.3,
+            "cenario_pessimista": 1320903.06,
+            "cenario_otimista": 1487389.54,
+            "margem_erro": 83243.24
+        },
+        {
+            "periodo": "Outubro/2026",
+            "mes_num": 10,
+            "ano": 2026,
+            "faturamento_previsto": 1711389.96,
+            "cenario_pessimista": 1609932.13,
+            "cenario_otimista": 1812847.8,
+            "margem_erro": 101457.84
+        },
+        {
+            "periodo": "Novembro/2026",
+            "mes_num": 11,
+            "ano": 2026,
+            "faturamento_previsto": 2048794.16,
+            "cenario_pessimista": 1927333.69,
+            "cenario_otimista": 2170254.62,
+            "margem_erro": 121460.47
+        }
+    ],
+    "faturamento_total_previsto_trimestre": 5164330.42
+}
